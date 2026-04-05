@@ -36,7 +36,7 @@ export class InsightsComponent implements AfterViewInit, OnDestroy {
 
   get totalExpenses() { return this.state.totalExpenses(); }
 
-  get topCategory() {
+  get topCategory(): { category: string; amount: number } | null {
     return this.state.spendingByCategory()[0] || null;
   }
 
@@ -45,7 +45,7 @@ export class InsightsComponent implements AfterViewInit, OnDestroy {
     return Math.round((this.topCategory.amount / this.totalExpenses) * 100);
   }
 
-  get bestMonth() {
+  get bestMonth(): { label: string; income: number } | null {
     const data = [...this.state.monthlyData()].sort((a, b) => b.income - a.income);
     if (!data[0]) return null;
     const [year, month] = data[0].month.split('-');
