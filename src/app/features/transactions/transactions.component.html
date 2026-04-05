@@ -1,0 +1,107 @@
+<div class="transactions">
+  <!-- Top Bar with Search & Filters -->
+  <div class="controls">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        type="text"
+        placeholder="Search transactions..."
+        [value]="state.filters().search"
+        (input)="onSearch($event)" />
+    </div>
+
+    <div class="filter-group">
+      <button
+        class="filter-btn"
+        [class.active]="state.filters().type === 'all'"
+        (click)="setType('all')">All</button>
+      <button
+        class="filter-btn"
+        [class.active]="state.filters().type === 'income'"
+        (click)="setType('income')">Income</button>
+      <button
+        class="filter-btn"
+        [class.active]="state.filters().type === 'expense'"
+        (click)="setType('expense')">Expense</button>
+    </div>
+
+    <select class="cat-select" [value]="state.filters().category" (change)="onCategory($event)">
+      <option value="all">All Categories</option>
+      <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+    </select>
+
+    <button
+      *ngIf="state.role() === 'admin'"
+      class="add-btn"
+      (click)="openAdd()">
+      + New Transaction
+    </button>
+  </div>
+
+  <div class="meta">
+    Showing {{ state.filteredTransactions().length }} transactions
+  </div>
+
+  <!-- Table -->
+  <div class="table-container" *ngIf="state.filteredTransactions().length > 0; else empty">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="sortable" (click)="state.toggleSort('date')">
+            Date
+            <span class="sort-icon" *ngIf="state.filters().sortBy === 'date'">
+              {{ state.filters().sortDir === 'desc' ? '↓' : '↑' }}
+            </span>
+          </th>
+          <th>Description</th>
+          <th class="hide-sm">Category</th>
+          <th>Type</th>
+          <th class="sortable" (click)="state.toggleSort('amount')">
+            Amount
+            <span class="sort-icon" *ngIf="state.filters().sortBy === 'amount'">
+              {{ state.filters().sortDir === 'desc' ? '↓' : '↑' }}
+            </span>
+          </th>
+          <th *ngIf="state.role() === 'admin'" class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of state.filteredTransactions()">
+          <td class="date-cell">{{ t.date | date:'MMM d, y' }}</td>
+          <td class="desc-cell">{{ t.description }}</td>
+          <td class="hide-sm">
+            <span class="badge cat">{{ t.category }}</span>
+          </td>
+          <td>
+            <span class="badge type" [class]="t.type">
+              {{ t.type }}
+            </span>
+          </td>
+          <td class="amount-cell" [class]="t.type">
+            {{ t.type === 'income' ? '+' : '-' }}{{ t.amount | inr }}
+          </td>
+          <td *ngIf="state.role() === 'admin'" class="actions">
+            <button class="icon-btn edit" (click)="openEdit(t)">Edit</button>
+            <button class="icon-btn del" (click)="state.deleteTransaction(t.id)">Del</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #empty>
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <p>No transactions found for these filters.</p>
+      <button class="clear-btn" (click)="clearFilters()">Clear Filters</button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Modal -->
+<app-transaction-modal
+  *ngIf="showModal"
+  [transaction]="editingTransaction"
+  (save)="onSave($event)"
+  (cancel)="closeModal()"
+/>

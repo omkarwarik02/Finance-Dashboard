@@ -1,0 +1,82 @@
+<div class="dashboard">
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div class="card balance-card">
+      <div class="card-label">Total Balance</div>
+      <div class="card-value" [class.positive]="state.balance() >= 0" [class.negative]="state.balance() < 0">
+        {{ state.balance() | inr }}
+      </div>
+      <div class="card-sub">Savings rate: {{ state.savingsRate() }}%</div>
+      <div class="savings-bar">
+        <div class="savings-fill" [style.width.%]="state.savingsRate()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Total Income</div>
+      <div class="card-value green">{{ state.totalIncome() | inr }}</div>
+      <div class="card-sub">{{ incomeCount }} transactions</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Total Expenses</div>
+      <div class="card-value red">{{ state.totalExpenses() | inr }}</div>
+      <div class="card-sub">{{ expenseCount }} transactions</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Transactions</div>
+      <div class="card-value accent">{{ state.allTransactions().length }}</div>
+      <div class="card-sub">Across all time</div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Monthly Overview</div>
+      <div class="chart-wrap">
+        <canvas #barChart></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Spending Breakdown</div>
+      <div class="chart-wrap doughnut-wrap">
+        <canvas #doughnutChart></canvas>
+      </div>
+      <div class="legend">
+        <div class="legend-item" *ngFor="let item of state.spendingByCategory().slice(0,5)">
+          <span class="legend-dot" [style.background]="getCategoryColor(item.category)"></span>
+          <span class="legend-name">{{ item.category }}</span>
+          <span class="legend-val">{{ item.amount | inr }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="chart-card">
+    <div class="chart-title">Recent Transactions</div>
+    <div class="recent-list" *ngIf="state.allTransactions().length > 0; else empty">
+      <div class="recent-item" *ngFor="let t of state.allTransactions().slice(0,6)">
+        <div class="recent-icon" [class]="t.type">
+          {{ t.type === 'income' ? '↑' : '↓' }}
+        </div>
+        <div class="recent-info">
+          <div class="recent-desc">{{ t.description }}</div>
+          <div class="recent-cat">{{ t.category }} · {{ t.date | date:'MMM d, y' }}</div>
+        </div>
+        <div class="recent-amount" [class]="t.type">
+          {{ t.type === 'income' ? '+' : '-' }}{{ t.amount | inr }}
+        </div>
+      </div>
+    </div>
+    <ng-template #empty>
+      <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <p>No transactions yet.</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

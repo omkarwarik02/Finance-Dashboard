@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Design System */
+:root {
+  --bg: #0b0e14;
+  --surface: #12161f;
+  --surface2: #1c222d;
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #f0b429;
+  --green: #22c55e;
+  --red: #ef4444;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+/* Utility Classes */
+.positive { color: var(--green); }
+.negative { color: var(--red); }
+.accent   { color: var(--accent); }
+
+/* Animation Overrides */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+canvas {
+  width: 100% !important;
+  max-width: 100%;
+}

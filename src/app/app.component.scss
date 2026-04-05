@@ -1,0 +1,88 @@
+:host { display: block; }
+
+.shell {
+  display: flex; min-height: 100vh;
+  background: var(--bg); color: var(--text); font-family: var(--font);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 24px 16px;
+  position: sticky; top: 0; height: 100vh;
+}
+.logo {
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.5px; color: var(--accent);
+  margin-bottom: 36px; padding-left: 4px;
+}
+.logo span { color: var(--text); }
+
+.nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-radius: 10px; border: none;
+  background: transparent; color: var(--muted);
+  font-size: 14px; font-family: var(--font);
+  cursor: pointer; text-align: left; transition: all .15s;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: rgba(240,180,41,.12); color: var(--accent); }
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+.role-panel { display: flex; flex-direction: column; gap: 8px; }
+.role-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.role-select {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 10px; color: var(--text);
+  font-size: 13px; font-family: var(--font); outline: none; cursor: pointer; width: 100%;
+}
+.role-select:focus { border-color: var(--accent); }
+.role-select option { background: #1e2333; }
+.role-hint { font-size: 11px; color: var(--muted); }
+.role-hint.admin { color: var(--accent); }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.topbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+  background: var(--surface); position: sticky; top: 0; z-index: 10;
+}
+.page-title { font-size: 16px; font-weight: 600; flex: 1; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.role-badge {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; padding: 5px 12px; border-radius: 20px;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+}
+.role-badge.admin { border-color: rgba(240,180,41,.3); color: var(--accent); }
+.role-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.role-badge.admin .role-dot { background: var(--accent); }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(240,180,41,.2); border: 1px solid rgba(240,180,41,.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: var(--accent);
+}
+
+.mobile-nav { display: none; gap: 4px; }
+.mobile-nav-btn {
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 8px;
+  background: transparent; color: var(--muted); font-size: 15px; cursor: pointer;
+}
+.mobile-nav-btn.active { border-color: var(--accent); color: var(--accent); }
+
+.content { padding: 24px; flex: 1; overflow: auto; }
+
+/* Mobile: hide sidebar, show mobile nav */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .mobile-nav { display: flex; }
+  .content { padding: 16px; }
+  .topbar { padding: 12px 16px; }
+}

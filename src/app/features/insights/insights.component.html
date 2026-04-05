@@ -1,0 +1,85 @@
+<div class="insights">
+  <!-- Key Insight Cards -->
+  <div class="insight-grid">
+    <div class="insight-card highlight">
+      <div class="insight-header">
+        <div class="insight-icon">🏆</div>
+        <div class="insight-label">Top Spending Category</div>
+      </div>
+      <div class="insight-value">{{ topCategory?.category || '—' }}</div>
+      <div class="insight-sub">{{ topCategory?.amount | inr }} total</div>
+      <div class="mini-bar">
+        <div class="mini-fill" [style.width.%]="topCategoryPct"></div>
+      </div>
+      <div class="insight-pct">{{ topCategoryPct }}% of total expenses</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-header">
+        <div class="insight-icon">📈</div>
+        <div class="insight-label">Best Income Month</div>
+      </div>
+      <div class="insight-value">{{ bestMonth?.label || '—' }}</div>
+      <div class="insight-sub">{{ bestMonth?.income | inr }} earned</div>
+    </div>
+
+    <div class="insight-card" [class.good]="state.savingsRate() >= 20" [class.bad]="state.savingsRate() < 10">
+      <div class="insight-header">
+        <div class="insight-icon">💰</div>
+        <div class="insight-label">Savings Rate</div>
+      </div>
+      <div class="insight-value">{{ state.savingsRate() }}%</div>
+      <div class="insight-sub">{{ savingsMessage }}</div>
+      <div class="mini-bar">
+        <div class="mini-fill rate" [style.width.%]="state.savingsRate()"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trends Chart -->
+  <div class="chart-card">
+    <div class="chart-title">Income vs Expenses Trend</div>
+    <div class="chart-wrap">
+      <canvas #lineChart></canvas>
+    </div>
+  </div>
+
+  <div class="lower-grid">
+    <!-- Category Breakdown (Detailed) -->
+    <div class="chart-card">
+      <div class="chart-title">Category Breakdown</div>
+      <div class="cat-list" *ngIf="state.spendingByCategory().length > 0; else noData">
+        <div class="cat-row" *ngFor="let item of state.spendingByCategory()">
+          <div class="cat-name">{{ item.category }}</div>
+          <div class="cat-bar-wrap">
+            <div class="cat-bar-fill"
+              [style.width.%]="(item.amount / state.spendingByCategory()[0].amount) * 100"
+              [style.background]="getCategoryColor(item.category)">
+            </div>
+          </div>
+          <div class="cat-amount">{{ item.amount | inr }}</div>
+          <div class="cat-pct">{{ totalExpenses > 0 ? ((item.amount / totalExpenses) * 100).toFixed(1) : 0 }}%</div>
+        </div>
+      </div>
+      <ng-template #noData>
+        <div class="empty-state"><p>No expense data available.</p></div>
+      </ng-template>
+    </div>
+
+    <!-- Observations -->
+    <div class="chart-card">
+      <div class="chart-title">Key Observations</div>
+      <div class="obs-list">
+        <div class="obs-item" *ngFor="let obs of observations">
+          <span class="obs-emoji">{{ obs.emoji }}</span>
+          <div class="obs-content">
+            <div class="obs-text">{{ obs.text }}</div>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="observations.length === 0">
+          <p>Add more data to see patterns.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

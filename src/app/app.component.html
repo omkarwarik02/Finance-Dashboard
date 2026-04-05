@@ -1,0 +1,81 @@
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">fin<span>IQ</span></div>
+
+    <nav class="nav">
+      <a
+        class="nav-item"
+        routerLink="/dashboard"
+        routerLinkActive="active">
+        <span class="nav-icon">⊞</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a
+        class="nav-item"
+        routerLink="/transactions"
+        routerLinkActive="active">
+        <span class="nav-icon">⇄</span>
+        <span class="nav-label">Transactions</span>
+      </a>
+      <a
+        class="nav-item"
+        routerLink="/insights"
+        routerLinkActive="active">
+        <span class="nav-icon">◈</span>
+        <span class="nav-label">Insights</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="role-panel">
+        <div class="role-label">Current Role</div>
+        <select class="role-select" [value]="state.role()" (change)="setRole($event)">
+          <option value="viewer">👁 Viewer</option>
+          <option value="admin">⚙ Admin</option>
+        </select>
+        <div class="role-hint" *ngIf="state.role() === 'viewer'">Read-only access</div>
+        <div class="role-hint admin" *ngIf="state.role() === 'admin'">Can add &amp; edit transactions</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="page-title">
+        {{ pageTitle() }}
+      </div>
+
+      <!-- Mobile nav -->
+      <div class="mobile-nav">
+        <a
+          class="mobile-nav-btn"
+          routerLink="/dashboard"
+          routerLinkActive="active">⊞</a>
+        <a
+          class="mobile-nav-btn"
+          routerLink="/transactions"
+          routerLinkActive="active">⇄</a>
+        <a
+          class="mobile-nav-btn"
+          routerLink="/insights"
+          routerLinkActive="active">◈</a>
+      </div>
+
+      <div class="topbar-right">
+        <div class="role-badge" [class]="state.role()">
+          <span class="role-dot"></span>
+          {{ state.role() === 'admin' ? 'Admin' : 'Viewer' }}
+        </div>
+        <div class="avatar">OM</div>
+      </div>
+    </header>
+
+    <!-- Tab Content -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
